@@ -1,18 +1,23 @@
 import express from 'express';
 
-const router = express.Router();
+const request = express.Router();
 
-export default router;
+export default request;
 
-router.post("/", (req, res) => {
+request.get("/", (req, res) => {
+  res.send("Hello from Notes API");
+});
+
+
+request.post("/", (req, res) => {
   res.json({message: "post created succuessfully"});
 });
 
-router.put("/:id", (req, res) => {
+request.put("/:id", (req, res) => {
     res.json({message: "Post updated successfully"});
 });
 
-router.delete("/:id", (req, res) => {
+request.delete("/:id", (req, res) => {
     res.json({message: "Post deleted successfully"});
 });
 
