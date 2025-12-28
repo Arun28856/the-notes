@@ -1,5 +1,5 @@
 import express from 'express';
-import { getNotes, postNotes, putNotes, deleteNotes } from './Controllers/notesController.js';
+import { getNotes, postNotes, putNotes, deleteNotes } from '../Controllers/notesController.js';
 
 const request = express.Router();
 
