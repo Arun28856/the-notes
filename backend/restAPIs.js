@@ -1,23 +1,11 @@
 import express from 'express';
+import { getNotes, postNotes, putNotes, deleteNotes } from './Controllers/notesController.js';
 
 const request = express.Router();
 
 export default request;
 
-request.get("/", (req, res) => {
-  res.send("Hello from Notes API");
-});
-
-
-request.post("/", (req, res) => {
-  res.json({message: "post created succuessfully"});
-});
-
-request.put("/:id", (req, res) => {
-    res.json({message: "Post updated successfully"});
-});
-
-request.delete("/:id", (req, res) => {
-    res.json({message: "Post deleted successfully"});
-});
-
+request.get("/", getNotes);
+request.post("/", postNotes);
+request.put("/:id", putNotes);
+request.delete("/:id", deleteNotes);
