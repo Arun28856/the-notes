@@ -1,5 +1,5 @@
 import express from "express";
-import request from "./restAPIs.js";
+import request from "./routes/restAPIs.js";
 
 const app = express();
 
