@@ -1,10 +1,18 @@
+import 'dotenv/config';
 import express from "express";
 import request from "./routes/restAPIs.js";
+import { connectDB } from "./config/db.js";
+
+console.log(process.env.MONGODB_URI);
 
 const app = express();
+const PORT = process.env.PORT || 8080;
+
+
+connectDB();
 
 app.use("/api/notes", request);
 
-app.listen(8080, () => {
-  console.log('Server is running on port 8080');
+app.listen(PORT, () => {
+  console.log("Server started on PORT:", PORT);
 });
