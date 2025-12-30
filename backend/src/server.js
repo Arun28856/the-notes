@@ -8,8 +8,9 @@ console.log(process.env.MONGODB_URI);
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-
 connectDB();
+
+app.use(express.json());
 
 app.use("/api/notes", request);
 
