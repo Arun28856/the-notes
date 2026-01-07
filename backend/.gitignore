@@ -1,0 +1,16 @@
+#environment variables
+.env.local
+.env.development.local
+
+#dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+#config files
+/.env   
+package-lock.json
+package.json
+
+#next.js build output
+/.next
