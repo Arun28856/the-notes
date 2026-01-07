@@ -5,7 +5,9 @@ import { NotesPage } from './pages/NotesPage';
 import toast from 'react-hot-toast';
 
 const App = () => {
-  return <div data-theme="forest">
+  return (
+  <div className='relative h-full w-full'>
+  <div className="absolute inset-0 -z-10 h-full w-full bg-black" />
   <Routes>
 
     <Route path = '/' element = {<HomePage />} />
@@ -13,7 +15,7 @@ const App = () => {
     <Route path = '/note/:id' element = {<NotesPage />} />
 
   </Routes>
-  </div>;
+  </div>);
 }
 
 export default App
