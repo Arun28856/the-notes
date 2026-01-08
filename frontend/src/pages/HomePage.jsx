@@ -1,4 +1,4 @@
-import Navbar  from '../components/navbar.jsx';
+import Navbar  from '../components/Navbar.jsx';
 import { useEffect, useState } from 'react';
 import Ratelimited from '../components/RatelimitedUI.jsx';
 import NoteCard from '../components/NoteCard.jsx';
