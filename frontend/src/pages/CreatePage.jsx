@@ -2,12 +2,13 @@ import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 export const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ export const CreatePage = () => {
       toast.success("Note created successfully");
       setTitle("");
       setContent("");
+      setTimeout(() => navigate('/'), 100);
     } catch (error) {
       toast.error("Failed to create note");
     } finally {
