@@ -46,6 +46,19 @@ export const NotesPage = () => {
     }
   }
 
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if(!window.confirm('Are you sure you want to delete this note?')) return;
+
+    try {
+      await axios.delete(`http://localhost:8080/api/notes/${id}`);
+      toast.success('Note deleted successfully');
+      navigate('/');
+    } catch (error) {
+      toast.error('Failed to delete note');
+    }
+  }
+
   return (
   <div className='min-h-screen bg-base-200'>
     <div className='container mx-auto px-4 py-8'>
@@ -85,6 +98,10 @@ export const NotesPage = () => {
                  onChange={(e) => setContent(e.target.value)}
                 />
               </div>
+
+              <button className='btn btn-error' disabled={loading || fetching} onClick={handleDelete}>
+                Delete
+              </button>
             </form>
             )}
           </div>
