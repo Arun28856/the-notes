@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 require('../config/db');
 const User = require('../models/User');
+const authRoutes = require('../routes/auth');
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
+app.use('/api/auth', authRoutes);
+
 app.get('/', (req, res) => {
     res.json({ message: 'Auth server is running' });
 });
