@@ -6,6 +6,54 @@ const { generateOTP, sendOTPEmail } = require('../utils/otp');
 
 const router = express.Router();
 
+// Login route
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        if (!user.isVerified) {
+            return res.status(403).json({ error: 'Please verify your email first' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.json({
+            message: 'Login successful',
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Register route
 router.post('/register', async (req, res) => {
     try {
@@ -97,7 +145,22 @@ router.post('/verify-otp', async (req, res) => {
         user.otp = undefined;
         await user.save();
 
-        res.status(200).json({ message: 'Email verified successfully' });
+        // Generate JWT token
+        const jwt = require('jsonwebtoken');
+        const token = jwt.sign(
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.status(200).json({ 
+            message: 'Email verified successfully',
+            token,
+            user: {
+                name: user.name,
+                email: user.email
+            }
+        });
 
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
@@ -144,4 +207,41 @@ router.post('/resend-otp', async (req, res) => {
         console.error('Resend OTP error:', error);
     }
 });
+
+// Google OAuth routes
+router.get('/google', (req, res, next) => {
+    const passport = require('passport');
+    require('../config/passport');
+    passport.authenticate('google', {
+        scope: ['profile', 'email']
+    })(req, res, next);
+});
+
+router.get('/google/callback', (req, res, next) => {
+    const passport = require('passport');
+    require('../config/passport');
+    passport.authenticate('google', {
+        failureRedirect: '/api/auth/google/failure',
+        session: false
+    }, (err, user) => {
+        if (err || !user) {
+            return res.redirect('http://localhost:8080/?error=auth_failed');
+        }
+        
+        // Generate JWT token
+        const jwt = require('jsonwebtoken');
+        const token = jwt.sign(
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+        
+        res.redirect(`http://localhost:8080/?token=${token}&name=${encodeURIComponent(user.name)}`);
+    })(req, res, next);
+});
+
+router.get('/google/failure', (req, res) => {
+    res.status(401).json({ error: 'Google authentication failed' });
+});
+
 module.exports = router;

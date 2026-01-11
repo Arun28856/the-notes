@@ -5,40 +5,91 @@ import NoteCard from '../components/NoteCard.jsx';
 
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router';
+import { Link, useSearchParams, useNavigate } from 'react-router';
 
 export const HomePage = () => {
   const [isRatelimited, setIsRatelimited] = useState(false);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  console.log('HomePage component loaded');
+  console.log('Current URL search params:', window.location.search);
 
   useEffect(() => {
-    const fetchNotes = async () => {
-
-      try {
-        const res = await axios.get("http://localhost:8080/api/notes");
-        console.log(res.data);
-        setNotes(res.data);
-        setIsRatelimited(false);
-      } catch (error) {
-        console.log("Error fetching notes:");
-        if(error.response?.status === 429){
-          setIsRatelimited(true);
-        } else {
-          toast.error("Failed to load notes");
+    const initializeAuth = async () => {
+      // Check for token in URL (from OAuth redirect)
+      const tokenFromUrl = searchParams.get('token');
+      const nameFromUrl = searchParams.get('name');
+      
+      console.log('Token from URL:', tokenFromUrl);
+      console.log('Name from URL:', nameFromUrl);
+      
+      if (tokenFromUrl) {
+        console.log('Setting token in localStorage:', tokenFromUrl);
+        localStorage.setItem('authToken', tokenFromUrl);
+        if (nameFromUrl) {
+          toast.success(`Welcome, ${decodeURIComponent(nameFromUrl)}!`);
         }
-      } finally {
-        setLoading(false);
+        // Clean up URL
+        window.history.replaceState({}, document.title, '/');
       }
-    }
-    fetchNotes();
-  }, []);
+
+      // Check if user is logged in
+      const token = localStorage.getItem('authToken');
+      console.log('Token from localStorage:', token);
+      
+      if (!token) {
+        console.log('No token found, redirecting to auth app');
+        window.location.href = 'http://localhost:3003';
+        return;
+      }
+
+      const fetchNotes = async () => {
+        try {
+          console.log('Fetching notes with token:', token);
+          const res = await axios.get("http://localhost:8080/api/notes", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          console.log('Notes fetched successfully:', res.data);
+          setNotes(res.data);
+          setIsRatelimited(false);
+        } catch (error) {
+          console.log("Error fetching notes:", error);
+          if(error.response?.status === 429){
+            setIsRatelimited(true);
+          } else if (error.response?.status === 401) {
+            console.log('Authentication failed - 401 error');
+            toast.error('Session expired. Please login again.');
+            localStorage.removeItem('authToken');
+            window.location.href = 'http://localhost:3003';
+          } else {
+            toast.error("Failed to load notes");
+          }
+        } finally {
+          setLoading(false);
+        }
+      }
+      
+      await fetchNotes();
+    };
+    
+    initializeAuth();
+  }, [searchParams]);
 
   const handleDelete = async (id) => {
     if(!window.confirm('Are you sure you want to delete this note?')) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/notes/${id}`);
+      const token = localStorage.getItem('authToken');
+      await axios.delete(`http://localhost:8080/api/notes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       toast.success('Note deleted successfully');
       setNotes(notes.filter(note => note._id !== id));
     } catch (error) {
