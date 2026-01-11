@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const path = require('path');
 require('dotenv').config();
 require('../config/db');
 const User = require('../models/User');
@@ -10,19 +12,24 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:3003', 'http://localhost:8080'],
     credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
+
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Routes
 app.use('/api/auth', authRoutes);
-
-app.get('/', (req, res) => {
-    res.json({ message: 'Auth server is running' });
-});
 
 // Test route to create a sample user
 app.post('/test/create-user', async (req, res) => {
@@ -37,6 +44,11 @@ app.post('/test/create-user', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// Serve React app for all other routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 // Start server

@@ -15,9 +15,14 @@ export const CreatePage = () => {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('authToken');
       const res = await axios.post("http://localhost:8080/api/notes", {
         title,
         content
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       console.log("Note created:", res.data);
       toast.success("Note created successfully");
@@ -25,7 +30,13 @@ export const CreatePage = () => {
       setContent("");
       setTimeout(() => navigate('/'), 100);
     } catch (error) {
-      toast.error("Failed to create note");
+      if (error.response?.status === 401) {
+        toast.error('Session expired. Please login again.');
+        localStorage.removeItem('authToken');
+        window.location.href = 'http://localhost:3003';
+      } else {
+        toast.error("Failed to create note");
+      }
     } finally {
       setLoading(false);
     }

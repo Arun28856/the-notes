@@ -15,12 +15,23 @@ export const NotesPage = () => {
   useEffect(() => {
     const fetchNote = async (e) => {
       try {
-        const res = await axios.get(`http://localhost:8080/api/notes/${id}`)
+        const token = localStorage.getItem('authToken');
+        const res = await axios.get(`http://localhost:8080/api/notes/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
         setTitle(res.data.title)
         setContent(res.data.content)
       } catch (error) {
-        toast.error('Failed to fetch note')
-        navigate('/')
+        if (error.response?.status === 401) {
+          toast.error('Session expired. Please login again.');
+          localStorage.removeItem('authToken');
+          window.location.href = 'http://localhost:3003';
+        } else {
+          toast.error('Failed to fetch note')
+          navigate('/')
+        }
       } finally {
         setFetching(false)
       }
@@ -33,14 +44,25 @@ export const NotesPage = () => {
     setLoading(true)
     
     try {
+      const token = localStorage.getItem('authToken');
       await axios.put(`http://localhost:8080/api/notes/${id}`, {
         title,
         content
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
       toast.success('Note updated successfully')
       setTimeout(() => navigate('/'), 1000)
     } catch (error) {
-      toast.error('Failed to update note')
+      if (error.response?.status === 401) {
+        toast.error('Session expired. Please login again.');
+        localStorage.removeItem('authToken');
+        window.location.href = 'http://localhost:3003';
+      } else {
+        toast.error('Failed to update note')
+      }
     } finally {
       setLoading(false)
     }
@@ -51,7 +73,12 @@ export const NotesPage = () => {
     if(!window.confirm('Are you sure you want to delete this note?')) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/notes/${id}`);
+      const token = localStorage.getItem('authToken');
+      await axios.delete(`http://localhost:8080/api/notes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       toast.success('Note deleted successfully');
       navigate('/');
     } catch (error) {
