@@ -16,7 +16,7 @@ export const NotesPage = () => {
     const fetchNote = async (e) => {
       try {
         const token = localStorage.getItem('authToken');
-        const res = await axios.get(`http://localhost:8080/api/notes/${id}`, {
+        const res = await axios.get(`https://the-notes-production.up.railway.app/api/notes/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -45,7 +45,7 @@ export const NotesPage = () => {
     
     try {
       const token = localStorage.getItem('authToken');
-      await axios.put(`http://localhost:8080/api/notes/${id}`, {
+      await axios.put(`https://the-notes-production.up.railway.app/api/notes/${id}`, {
         title,
         content
       }, {
@@ -74,7 +74,7 @@ export const NotesPage = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      await axios.delete(`http://localhost:8080/api/notes/${id}`, {
+      await axios.delete(`https://the-notes-production.up.railway.app/api/notes/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

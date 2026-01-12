@@ -49,7 +49,7 @@ export const HomePage = () => {
       const fetchNotes = async () => {
         try {
           console.log('Fetching notes with token:', token);
-          const res = await axios.get("http://localhost:8080/api/notes", {
+          const res = await axios.get("https://the-notes-production.up.railway.app/api/notes", {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -85,7 +85,7 @@ export const HomePage = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      await axios.delete(`http://localhost:8080/api/notes/${id}`, {
+      await axios.delete(`https://the-notes-production.up.railway.app/api/notes/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
