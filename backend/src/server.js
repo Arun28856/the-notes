@@ -21,6 +21,7 @@ const allowedOrigins = [
   'http://localhost:3003',
   'http://localhost:5173',
   'http://localhost:8080',
+  'https://the-notes-app-nine.vercel.app/',
   process.env.FRONTEND_URL,
   process.env.AUTH_URL
 ].filter(Boolean);
