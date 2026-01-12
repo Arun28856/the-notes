@@ -34,7 +34,7 @@ export const VerifyOTPPage = () => {
       
       // Store token and redirect to notes app
       if (res.data.token) {
-        const redirectUrl = `http://localhost:8080/?token=${res.data.token}&name=${encodeURIComponent(res.data.user.name)}`;
+        const redirectUrl = `http://localhost:5173/?token=${res.data.token}&name=${encodeURIComponent(res.data.user.name)}`;
         window.location.href = redirectUrl;
       } else {
         navigate('/success');
