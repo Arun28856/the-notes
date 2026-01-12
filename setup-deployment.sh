@@ -98,7 +98,7 @@ case $deployment_choice in
             if command -v openssl &> /dev/null; then
                 JWT_SECRET=$(openssl rand -hex 32)
             elif [ -r /dev/urandom ]; then
-                JWT_SECRET=$(head -c 32 /dev/urandom | base64 | tr -d '/+=' | head -c 32)
+                JWT_SECRET=$(head -c 32 /dev/urandom | base64 | tr -d '/+=')
             else
                 print_error "Cannot generate secure JWT secret. Please install openssl."
                 print_warning "You will need to manually set JWT_SECRET in the .env file."

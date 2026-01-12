@@ -5,6 +5,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      # Note: VITE_API_URL must be set at build time for production
+      # For Docker deployment, rebuild with your actual backend URL:
+      # docker-compose build --build-arg VITE_API_URL=https://your-backend-url.com
     ports:
       - "80:80"
     environment:
