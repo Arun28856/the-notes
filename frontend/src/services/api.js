@@ -1,13 +1,21 @@
 // frontend/src/services/api.js
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3003';
+// Safely get environment variable
+const getApiUrl = () => {
+  try {
+    return import.meta.env.VITE_API_URL || 'http://localhost:3003';
+  } catch (error) {
+    console.error('Error accessing environment variable:', error);
+    return 'http://localhost:3003';
+  }
+};
 
-console.log('=== API Configuration ===');
-console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
-console.log('API_BASE_URL:', API_BASE_URL);
-console.log('All env vars:', import.meta.env);
-console.log('========================');
+const API_BASE_URL = getApiUrl();
+
+// Log for debugging
+console.log('🔧 Environment:', import.meta.env.MODE);
+console.log('🔧 API URL:', API_BASE_URL);
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -30,7 +38,7 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor with token refresh
+// Response interceptor
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
