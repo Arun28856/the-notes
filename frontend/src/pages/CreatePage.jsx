@@ -16,7 +16,7 @@ export const CreatePage = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const res = await axios.post("http://localhost:8080/api/notes", {
+      const res = await axios.post("https://the-notes-production.up.railway.app/api/notes", {
         title,
         content
       }, {
