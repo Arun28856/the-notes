@@ -16,8 +16,17 @@ console.log(process.env.MONGODB_URI);
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// CORS configuration - allow Railway production URLs and local development
+const allowedOrigins = [
+  'http://localhost:3003',
+  'http://localhost:5173',
+  'http://localhost:8080',
+  process.env.FRONTEND_URL,
+  process.env.AUTH_URL
+].filter(Boolean);
+
 app.use(cors({
-  origin: ['http://localhost:3003', 'http://localhost:5173', 'http://localhost:8080'],
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json());
@@ -34,15 +43,10 @@ app.get('*', (req, res) => {
 });
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
-  console.log("Server started on PORT:", PORT);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✓ Server running on port ${PORT}`);
+    console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
   }); 
-});
-
-const PORT1 = process.env.PORT || 3003;
-app.listen(PORT1, '0.0.0.0', () => {
-  console.log(`✓ Server running on port ${PORT1}`);
-  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 process.on('SIGTERM', () => {

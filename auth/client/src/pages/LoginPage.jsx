@@ -35,7 +35,7 @@ export const LoginPage = () => {
       
       if (res.data.token) {
         localStorage.setItem('authToken', res.data.token);
-        const redirectUrl = `http://localhost:8080/?token=${res.data.token}&name=${encodeURIComponent(res.data.user.name)}`;
+        const redirectUrl = `http://localhost:5173/?token=${res.data.token}&name=${encodeURIComponent(res.data.user.name)}`;
         window.location.href = redirectUrl;
       }
     } catch (error) {
