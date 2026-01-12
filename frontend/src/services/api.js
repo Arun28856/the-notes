@@ -4,10 +4,10 @@ import axios from 'axios';
 // Safely get environment variable
 const getApiUrl = () => {
   try {
-    return import.meta.env.VITE_API_URL || 'http://localhost:3003';
+    return import.meta.env.VITE_API_URL || 'https://the-notes-production.up.railway.app/';
   } catch (error) {
     console.error('Error accessing environment variable:', error);
-    return 'http://localhost:3003';
+    return 'https://the-notes-production.up.railway.app/';
   }
 };
 
