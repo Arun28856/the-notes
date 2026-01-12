@@ -31,13 +31,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
 
       - name: Build frontend
         run: |
@@ -66,8 +64,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: backend/package-lock.json
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
@@ -90,8 +86,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: auth/package-lock.json
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
