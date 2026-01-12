@@ -26,7 +26,7 @@ services:
       - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
       - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN}
       - JWT_SECRET=${JWT_SECRET}
-      - FRONTEND_URL=http://frontend:5173
+      - FRONTEND_URL=http://frontend:80
     networks:
       - app-network
 

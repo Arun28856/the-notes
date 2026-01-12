@@ -33,6 +33,15 @@ app.use(cors({
 app.use(express.json());
 app.use(rateLimiter);
 
+// Health check endpoint (no authentication required)
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    service: 'notes-backend'
+  });
+});
+
 // Serve static files from React build
 app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 

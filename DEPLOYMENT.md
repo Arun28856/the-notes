@@ -15,10 +15,7 @@ This guide will help you deploy the entire application to the cloud with public 
 
 **Method 1: One-Click Deploy**
 1. Click the button below:
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/the-notes&project-name=the-notes-app&root-directory=frontend)
-   
-   > **Note:** Replace `YOUR_USERNAME` with your GitHub username if you've forked this repository.
-   
+   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Arun28856/the-notes&project-name=the-notes-app&root-directory=frontend)
 2. Connect your GitHub account
 3. Configure environment variables:
    - `VITE_API_URL`: (Will be added after backend deployment)
@@ -39,10 +36,7 @@ npx vercel --prod
 
 **Method 1: One-Click Deploy**
 1. Click the button below:
-   [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/YOUR_USERNAME/the-notes&referralCode=railway)
-   
-   > **Note:** Replace `YOUR_USERNAME` with your GitHub username if you've forked this repository.
-   
+   [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Arun28856/the-notes&referralCode=railway)
 2. Connect your GitHub account
 3. Set root directory: `backend`
 4. Configure environment variables:

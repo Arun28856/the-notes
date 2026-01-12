@@ -97,9 +97,12 @@ case $deployment_choice in
             # Generate JWT secret safely
             if command -v openssl &> /dev/null; then
                 JWT_SECRET=$(openssl rand -hex 32)
+            elif [ -r /dev/urandom ]; then
+                JWT_SECRET=$(head -c 32 /dev/urandom | base64 | tr -d '/+=' | head -c 32)
             else
-                print_warning "openssl not found. Using fallback method for JWT secret."
-                JWT_SECRET=$(date +%s | sha256sum | base64 | head -c 32)
+                print_error "Cannot generate secure JWT secret. Please install openssl."
+                print_warning "You will need to manually set JWT_SECRET in the .env file."
+                JWT_SECRET="CHANGE_ME_TO_SECURE_RANDOM_VALUE"
             fi
             
             cat > .env << EOF
