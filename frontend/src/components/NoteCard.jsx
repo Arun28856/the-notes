@@ -1,6 +1,6 @@
 import { Link } from "react-router"
 import { Trash2Icon } from "lucide-react";
-import { formatDate } from "../../lib/Utils.js";
+import { formatDate } from "../../lib/utils.js";
 
 const NoteCard = ({note, handleDelete}) => {
   return (
