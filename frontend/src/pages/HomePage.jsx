@@ -1,6 +1,6 @@
 import Navbar  from '../components/Navbar.jsx';
 import { useEffect, useState } from 'react';
-import Ratelimited from '../components/RatelimitedUI.jsx';
+import Ratelimited from '../components/RatelimitedUI';
 import NoteCard from '../components/NoteCard.jsx';
 
 import axios from 'axios';
