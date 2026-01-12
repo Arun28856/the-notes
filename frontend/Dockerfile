@@ -13,6 +13,7 @@ RUN npm ci
 COPY . .
 
 # Build the application
+# Output directory is 'dist' as configured in vite.config.js
 RUN npm run build
 
 # Production stage

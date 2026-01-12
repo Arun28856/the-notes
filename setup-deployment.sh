@@ -94,13 +94,22 @@ case $deployment_choice in
         # Create .env file if it doesn't exist
         if [ ! -f .env ]; then
             echo "Creating .env file..."
+            # Generate JWT secret safely
+            if command -v openssl &> /dev/null; then
+                JWT_SECRET=$(openssl rand -hex 32)
+            else
+                print_warning "openssl not found. Using fallback method for JWT secret."
+                JWT_SECRET=$(date +%s | sha256sum | base64 | head -c 32)
+            fi
+            
             cat > .env << EOF
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
 UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
 UPSTASH_REDIS_REST_TOKEN=your_token_here
-JWT_SECRET=$(openssl rand -hex 32)
+JWT_SECRET=${JWT_SECRET}
 EOF
             print_success ".env file created. Please update with your actual values."
+            print_warning "A random JWT_SECRET has been generated. Keep it secure!"
         fi
         
         echo ""
