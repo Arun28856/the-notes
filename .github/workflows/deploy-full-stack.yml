@@ -19,6 +19,9 @@ on:
         type: boolean
         default: true
 
+permissions:
+  contents: read
+
 jobs:
   deploy-frontend:
     if: ${{ github.event.inputs.deploy_frontend == 'true' }}
