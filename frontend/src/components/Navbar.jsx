@@ -6,7 +6,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
-    window.location.href = 'http://localhost:3003';
+    window.location.href = 'http://localhost:8080';
   };
 
   return (

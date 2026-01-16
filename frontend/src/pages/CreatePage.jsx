@@ -33,7 +33,7 @@ export const CreatePage = () => {
       if (error.response?.status === 401) {
         toast.error('Session expired. Please login again.');
         localStorage.removeItem('authToken');
-        window.location.href = 'http://localhost:3003';
+        window.location.href = 'http://localhost:8080';
       } else {
         toast.error("Failed to create note");
       }
