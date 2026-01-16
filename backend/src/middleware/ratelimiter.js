@@ -10,7 +10,8 @@ const rateLimiter = async (req, res, next) => {
         next();
     } catch (error) {
         console.error("Error in rate limiter middleware:", error);
-        next(error);
+        // Skip rate limiting if there's an error (e.g., Upstash not configured)
+        next();
     }
 }
 
