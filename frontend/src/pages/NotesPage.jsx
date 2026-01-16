@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from "../lib/axios";
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -12,11 +12,9 @@ export const NotesPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  useEffect(() => {
     const fetchNote = async (e) => {
       try {
-        const token = localStorage.getItem('authToken');
-        const res = await axios.get(`https://the-notes-production.up.railway.app/api/notes/${id}`, {
+        const res = await axios.get(`/api/notes/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -24,67 +22,62 @@ export const NotesPage = () => {
         setTitle(res.data.title)
         setContent(res.data.content)
       } catch (error) {
-        if (error.response?.status === 401) {
-          toast.error('Session expired. Please login again.');
-          localStorage.removeItem('authToken');
-          window.location.href = 'http://localhost:8080';
-        } else {
-          toast.error('Failed to fetch note')
-          navigate('/')
-        }
+        toast.error('Failed to fetch note');
+        navigate('/');
       } finally {
         setFetching(false)
       }
     }
     fetchNote()
-  }, [id, navigate])
+  }
+
+  useEffect(() => {
+    const fetchNote = async () => {
+      try {
+        const res = await api.get(`/api/notes/${id}`);
+        setTitle(res.data.title);
+        setContent(res.data.content);
+      } catch (error) {
+        toast.error('Failed to fetch note');
+        navigate('/');
+      } finally {
+        setFetching(false);
+      }
+    };
+    fetchNote();
+  }, [id, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    
-    try {
-      const token = localStorage.getItem('authToken');
-      await axios.put(`https://the-notes-production.up.railway.app/api/notes/${id}`, {
+  
+      try {
+      await api.put(`/api/notes/${id}`, {
         title,
         content
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      toast.success('Note updated successfully')
-      setTimeout(() => navigate('/'), 1000)
+      });
+      toast.success('Note updated successfully');
+      setTimeout(() => navigate('/'), 1000);
     } catch (error) {
-      if (error.response?.status === 401) {
-        toast.error('Session expired. Please login again.');
-        localStorage.removeItem('authToken');
-        window.location.href = 'http://localhost:8080';
-      } else {
-        toast.error('Failed to update note')
-      }
+      toast.error('Failed to update note');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
 
   const handleDelete = async (e) => {
     e.preventDefault();
     if(!window.confirm('Are you sure you want to delete this note?')) return;
 
-    try {
-      const token = localStorage.getItem('authToken');
-      await axios.delete(`https://the-notes-production.up.railway.app/api/notes/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      try {
+      await api.delete(`/api/notes/${id}`);
       toast.success('Note deleted successfully');
       navigate('/');
     } catch (error) {
       toast.error('Failed to delete note');
     }
-  }
+};
 
   return (
   <div className='min-h-screen bg-base-200'>
@@ -139,6 +132,5 @@ export const NotesPage = () => {
     </div>
 
   </div>);
-}
 
 export default NotesPage;
