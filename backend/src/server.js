@@ -3,6 +3,7 @@ import express from "express";
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 import request from "./routes/restAPIs.js";
 import { connectDB } from "./config/db.js";
