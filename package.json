@@ -4,12 +4,10 @@
   "description": "Notes application with authentication",
   "main": "index.js",
   "scripts": {
-    "install-auth": "npm install --prefix auth",
     "install-backend": "npm install --prefix backend",
     "install-frontend": "npm install --prefix frontend",
     "build-frontend": "npm run build --prefix frontend",
-    "build-auth-client": "npm run build --prefix auth/client",
-    "build": "npm run install-auth && npm run install-backend && npm run install-frontend && npm run build-frontend && npm run build-auth-client",
+    "build": "npm run install-backend && npm run install-frontend && npm run build-frontend",
     "start": "npm run start --prefix backend"
   },
   "engines": {

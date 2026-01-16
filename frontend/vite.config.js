@@ -25,7 +25,7 @@ export default defineConfig({
   define: {
     // Make sure env vars are available
     'import.meta.env.VITE_API_URL': JSON.stringify(
-      process.env.VITE_API_URL || 'http://localhost:3003'
+      process.env.VITE_API_URL || 'http://localhost:8080'
     ),
   },
 });

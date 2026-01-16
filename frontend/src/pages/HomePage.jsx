@@ -42,7 +42,7 @@ export const HomePage = () => {
       
       if (!token) {
         console.log('No token found, redirecting to auth app');
-        window.location.href = 'http://localhost:3003';
+        window.location.href = 'http://localhost:8080';
         return;
       }
 
@@ -65,7 +65,7 @@ export const HomePage = () => {
             console.log('Authentication failed - 401 error');
             toast.error('Session expired. Please login again.');
             localStorage.removeItem('authToken');
-            window.location.href = 'http://localhost:3003';
+            window.location.href = 'http://localhost:8080';
           } else {
             toast.error("Failed to load notes");
           }
