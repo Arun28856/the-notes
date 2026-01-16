@@ -15,18 +15,19 @@ console.log(process.env.MONGODB_URI);
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-if(process.env.NODE_ENV !== "production") {
-  // CORS configuration - allow Railway production URLs and local development
+// CORS configuration for all environments
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
+  'https://the-notes.onrender.com'
 ].filter(Boolean);
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: process.env.NODE_ENV === "production"
+    ? 'https://the-notes.onrender.com'
+    : allowedOrigins,
   credentials: true
 }));
-}
 
 app.use(express.json());
 app.use(rateLimiter);
