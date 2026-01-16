@@ -16,7 +16,6 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 if(process.env.NODE_ENV !== "production") {
-  // CORS configuration - allow Railway production URLs and local development
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
