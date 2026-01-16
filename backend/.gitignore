@@ -16,8 +16,7 @@ pnpm-lock.yaml
 
 #config files
 /.env   
-package-lock.json
-package.json
+
 
 #next.js build output
 /.next

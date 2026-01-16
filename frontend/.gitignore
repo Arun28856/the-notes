@@ -20,7 +20,6 @@ dist-ssr
 .env.production.local
 
 # Dependency lock files
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
@@ -39,11 +38,6 @@ pnpm-lock.yaml
 .env
 .env.local
 .env.*.local
-
-#config files
-postcss.config.js
-tailwind.config.js
-eslint.config.js
 
 #Readme files
 README.md
