@@ -14,7 +14,7 @@ export const CreatePage = () => {
     e.preventDefault();
     setLoading(true);
    try {
-      const res = await api.post("/api/notes", {
+      const res = await api.post("/notes", {
         title,
         content
       });

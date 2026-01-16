@@ -17,7 +17,7 @@ export const HomePage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await api.get("/api/notes");
+        const res = await api.get("/notes");
         setNotes(res.data);
         setIsRatelimited(false);
       } catch (error) {
@@ -36,7 +36,7 @@ export const HomePage = () => {
   const handleDelete = async (id) => {
     if(!window.confirm('Are you sure you want to delete this note?')) return;
     try {
-      await api.delete(`/api/notes/${id}`);
+      await api.delete(`/notes/${id}`);
       toast.success('Note deleted successfully');
       setNotes(notes.filter(note => note._id !== id));
     } catch (error) {

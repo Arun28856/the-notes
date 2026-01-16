@@ -15,7 +15,7 @@ export const NotesPage = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await api.get(`/api/notes/${id}`);
+        const res = await api.get(`/notes/${id}`);
         setTitle(res.data.title);
         setContent(res.data.content);
       } catch (error) {
@@ -31,9 +31,9 @@ export const NotesPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-  
+
       try {
-      await api.put(`/api/notes/${id}`, {
+      await api.put(`/notes/${id}`, {
         title,
         content
       });
@@ -52,13 +52,13 @@ export const NotesPage = () => {
     if(!window.confirm('Are you sure you want to delete this note?')) return;
 
       try {
-      await api.delete(`/api/notes/${id}`);
+      await api.delete(`/notes/${id}`);
       toast.success('Note deleted successfully');
       navigate('/');
     } catch (error) {
       toast.error('Failed to delete note');
     }
-};
+  };
 
   return (
   <div className='min-h-screen bg-base-200'>
