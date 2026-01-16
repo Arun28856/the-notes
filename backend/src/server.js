@@ -3,6 +3,7 @@ import express from "express";
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 import request from "./routes/restAPIs.js";
 import { connectDB } from "./config/db.js";
@@ -14,25 +15,28 @@ console.log(process.env.MONGODB_URI);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+const isProduction = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "deployment";
 
-if(process.env.NODE_ENV !== "production") {
+// CORS configuration for all environments
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
+  'https://the-notes.onrender.com'
 ].filter(Boolean);
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: isProduction
+    ? 'https://the-notes.onrender.com'
+    : allowedOrigins,
   credentials: true
 }));
-}
 
 app.use(express.json());
 app.use(rateLimiter);
 
 app.use("/api/notes", request);
 
-if(process.env.NODE_ENV === "production") {
+if(isProduction) {
   app.use(express.static(path.join(__dirname,"../frontend/dist")));
 
 app.get("*",(req,res) => {
