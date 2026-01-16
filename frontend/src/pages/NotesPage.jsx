@@ -1,4 +1,4 @@
-import api from "../lib/axios";
+import api from "../lib/api";
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -14,11 +14,7 @@ export const NotesPage = () => {
 
     const fetchNote = async (e) => {
       try {
-        const res = await axios.get(`/api/notes/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+        const res = await axios.get(`/api/notes/${id}`);
         setTitle(res.data.title)
         setContent(res.data.content)
       } catch (error) {
