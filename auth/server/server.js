@@ -11,10 +11,14 @@ const authRoutes = require('../routes/auth');
 const app = express();
 
 // Middleware
-app.use(cors({
+if(process.env.NODE_ENV !== "prodcution") {
+  app.use(cors({
     origin: ['http://localhost:3003', 'http://localhost:5173', 'http://localhost:8080'],
     credentials: true
 }));
+}
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -26,7 +30,9 @@ app.use(session({
 }));
 
 // Serve static files from React build
-app.use(express.static(path.join(__dirname, '../client/dist')));
+if(process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+}
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -46,10 +52,12 @@ app.post('/test/create-user', async (req, res) => {
     }
 });
 
-// Serve React app for all other routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-});
+// Serve React app for all other routes (only in production when serving independently)
+if(process.env.NODE_ENV === "production") {
+  app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
 
 // Start server
 const PORT = process.env.PORT || 3003;

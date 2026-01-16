@@ -1,0 +1,29 @@
+{
+  "name": "the-notes",
+  "version": "1.0.0",
+  "description": "Notes application with authentication",
+  "main": "index.js",
+  "scripts": {
+    "install-auth": "npm install --prefix auth",
+    "install-backend": "npm install --prefix backend",
+    "install-frontend": "npm install --prefix frontend",
+    "build-frontend": "npm run build --prefix frontend",
+    "build-auth-client": "npm run build --prefix auth/client",
+    "build": "npm run install-auth && npm run install-backend && npm run install-frontend && npm run build-frontend && npm run build-auth-client",
+    "start": "npm run start --prefix backend"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arun28856/the-notes.git"
+  },
+  "keywords": ["notes", "mern", "authentication"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Arun28856/the-notes/issues"
+  },
+  "homepage": "https://github.com/Arun28856/the-notes#readme"
+}

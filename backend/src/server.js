@@ -8,20 +8,19 @@ import request from "./routes/restAPIs.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from './middleware/ratelimiter.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.resolve();
 
 console.log(process.env.MONGODB_URI);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// CORS configuration - allow Railway production URLs and local development
+if(process.env.NODE_ENV !== "prodcution") {
+  // CORS configuration - allow Railway production URLs and local development
 const allowedOrigins = [
   'http://localhost:3003',
   'http://localhost:5173',
   'http://localhost:8080',
-  'https://the-notes-app-nine.vercel.app/',
   process.env.FRONTEND_URL,
   process.env.AUTH_URL
 ].filter(Boolean);
@@ -30,18 +29,30 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true
 }));
+}
+
 app.use(express.json());
 app.use(rateLimiter);
 
-// Serve static files from React build
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
-
 app.use("/api/notes", request);
 
-// Serve React app for all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
-});
+if(process.env.NODE_ENV === "production") {
+  // Serve auth client
+  app.use("/auth", express.static(path.join(__dirname,"../../auth/client/dist")));
+  
+  // Serve main frontend
+  app.use(express.static(path.join(__dirname,"../frontend/dist")));
+
+  // Fallback to main frontend for root and unknown routes
+  app.get("*",(req,res) => {
+    // Check if auth route
+    if(req.path.startsWith("/auth")) {
+      res.sendFile(path.join(__dirname,"../../auth/client/dist","index.html"))
+    } else {
+      res.sendFile(path.join(__dirname,"../frontend","dist","index.html"))
+    }
+  })
+}
 
 connectDB().then(() => {
   app.listen(PORT, '0.0.0.0', () => {
