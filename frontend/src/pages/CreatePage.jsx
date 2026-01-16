@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from "../lib/axios";
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -13,16 +13,10 @@ export const CreatePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    try {
-      const token = localStorage.getItem('authToken');
-      const res = await axios.post("https://the-notes-production.up.railway.app/api/notes", {
+   try {
+      const res = await api.post("/api/notes", {
         title,
         content
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
       });
       console.log("Note created:", res.data);
       toast.success("Note created successfully");
@@ -30,18 +24,11 @@ export const CreatePage = () => {
       setContent("");
       setTimeout(() => navigate('/'), 100);
     } catch (error) {
-      if (error.response?.status === 401) {
-        toast.error('Session expired. Please login again.');
-        localStorage.removeItem('authToken');
-        window.location.href = 'http://localhost:8080';
-      } else {
-        toast.error("Failed to create note");
-      }
+      toast.error("Failed to create note");
     } finally {
       setLoading(false);
     }
-  }
-
+  };
 
   return (
   <div className='min-h-screen bg-base-200'>
