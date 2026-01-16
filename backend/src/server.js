@@ -36,21 +36,11 @@ app.use(rateLimiter);
 app.use("/api/notes", request);
 
 if(process.env.NODE_ENV === "production") {
-  // Serve auth client
-  app.use("/auth", express.static(path.join(__dirname,"../../auth/client/dist")));
-  
-  // Serve main frontend
   app.use(express.static(path.join(__dirname,"../frontend/dist")));
 
-  // Fallback to main frontend for root and unknown routes
-  app.get("*",(req,res) => {
-    // Check if auth route
-    if(req.path.startsWith("/auth")) {
-      res.sendFile(path.join(__dirname,"../../auth/client/dist","index.html"))
-    } else {
-      res.sendFile(path.join(__dirname,"../frontend","dist","index.html"))
-    }
-  })
+app.get("*",(req,res) => {
+  res.sendFile(path.join(__dirname,"../frontend","dist","index.html"))
+})
 }
 
 connectDB().then(() => {
