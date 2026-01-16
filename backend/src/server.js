@@ -15,6 +15,7 @@ console.log(process.env.MONGODB_URI);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+const isProduction = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "deployment";
 
 // CORS configuration for all environments
 const allowedOrigins = [
@@ -24,7 +25,7 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(cors({
-  origin: process.env.NODE_ENV === "production"
+  origin: isProduction
     ? 'https://the-notes.onrender.com'
     : allowedOrigins,
   credentials: true
@@ -35,7 +36,7 @@ app.use(rateLimiter);
 
 app.use("/api/notes", request);
 
-if(process.env.NODE_ENV === "production") {
+if(isProduction) {
   app.use(express.static(path.join(__dirname,"../frontend/dist")));
 
 app.get("*",(req,res) => {
