@@ -9,10 +9,15 @@ import { connectDB } from "./config/db.js";
 import rateLimiter from './middleware/ratelimiter.js';
 import * as Sentry from "@sentry/node";
 
+const app = express();
+
 Sentry.init({
   dsn: "https://9de7b5f6705c68a2d8f26769a5e21666@o4510764003033088.ingest.us.sentry.io/4510764095766528",
   environment: process.env.NODE_ENV,
   tracesSampleRate: 1.0,
+  integrations: [
+    Sentry.expressIntegration({ app }),
+  ],
 });
 
 
@@ -20,7 +25,6 @@ const __dirname = path.resolve();
 
 console.log(process.env.MONGODB_URI);
 
-const app = express();
 const PORT = process.env.PORT || 8080;
 
 if(process.env.NODE_ENV !== "production") {
@@ -28,10 +32,6 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
 ].filter(Boolean);
-
-app.use(Sentry.Handlers.requestHandler());
-app.use(Sentry.Handlers.tracingHandler());
-
 
 app.use(cors({
   origin: allowedOrigins,
@@ -52,8 +52,8 @@ app.get("*",(req,res) => {
 })
 }
 
-
-app.use(Sentry.Handlers.errorHandler());
+// Sentry error handler must be registered after all controllers and before other error handlers
+Sentry.setupExpressErrorHandler(app);
 
 connectDB().then(() => {
   app.listen(PORT, '0.0.0.0', () => {
