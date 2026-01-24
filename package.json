@@ -14,11 +14,18 @@
     "type": "git",
     "url": "git+https://github.com/Arun28856/the-notes.git"
   },
-  "keywords": ["notes", "mern", "authentication"],
+  "keywords": [
+    "notes",
+    "mern",
+    "authentication"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Arun28856/the-notes/issues"
   },
-  "homepage": "https://github.com/Arun28856/the-notes#readme"
+  "homepage": "https://github.com/Arun28856/the-notes#readme",
+  "devDependencies": {
+    "cypress": "^15.9.0"
+  }
 }
