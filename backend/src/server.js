@@ -7,6 +7,14 @@ import { fileURLToPath } from 'url';
 import request from "./routes/restAPIs.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from './middleware/ratelimiter.js';
+import * as Sentry from "@sentry/node";
+
+Sentry.init({
+  dsn: "https://9de7b5f6705c68a2d8f26769a5e21666@o4510764003033088.ingest.us.sentry.io/4510764095766528",
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+});
+
 
 const __dirname = path.resolve();
 
@@ -20,6 +28,10 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
 ].filter(Boolean);
+
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+
 
 app.use(cors({
   origin: allowedOrigins,
@@ -39,6 +51,9 @@ app.get("*",(req,res) => {
   res.sendFile(path.join(__dirname,"../frontend","dist","index.html"))
 })
 }
+
+
+app.use(Sentry.Handlers.errorHandler());
 
 connectDB().then(() => {
   app.listen(PORT, '0.0.0.0', () => {
