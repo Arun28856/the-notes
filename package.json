@@ -27,5 +27,9 @@
   "homepage": "https://github.com/Arun28856/the-notes#readme",
   "devDependencies": {
     "cypress": "^15.9.0"
+  },
+  "dependencies": {
+    "@sentry/node": "^10.36.0",
+    "firebase": "^12.8.0"
   }
 }

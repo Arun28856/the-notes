@@ -1,4 +1,4 @@
-import api from "../lib/axios";
+import api from "../lib/api";
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
