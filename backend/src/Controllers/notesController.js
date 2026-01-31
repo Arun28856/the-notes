@@ -3,7 +3,6 @@ import note from "../models/note.js";
 export async function getNotes(req, res) {
     try {
         const notes = await note.find({ userId: req.user.uid }).sort({ createdAt: -1 });
-        const notes = await note.find({ userId: req.user.userId }).sort({ createdAt: -1 });
         res.status(200).json(notes);
     } catch (error) {
         console.error("Error in getNotes:", error?.message ?? error);
@@ -30,11 +29,6 @@ export async function createNotes(req, res) {
             title,
             content,
             userId: req.user.uid,
-        const {title, content} = req.body;
-        const newNote = new note({
-            title, 
-            content,
-            userId: req.user.userId
         });
         await newNote.save();
         res.status(201).json({ message: "Note created successfully" });
