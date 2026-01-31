@@ -3,8 +3,11 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    // CHANGE THIS to your Render URL
-    baseUrl: 'https://the-notes.onrender.com', // Replace with your actual Render URL
+    // Use localhost for local development, or Render URL for production testing
+    baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:5173',
+    
+    // Spec file pattern
+    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     
     viewportWidth: 1280,
     viewportHeight: 720,

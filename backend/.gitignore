@@ -15,8 +15,11 @@ pnpm-lock.yaml
 .pnp.js
 
 #config files
-/.env   
+.env   
 
 
 #next.js build output
 /.next
+
+#firebase 
+the-notes-8047e-firebase-adminsdk-8o94c-7008867158.json

@@ -2,6 +2,7 @@ import {Route, Routes} from 'react-router';
 import { HomePage } from './pages/HomePage';
 import { CreatePage } from './pages/CreatePage';
 import { NotesPage } from './pages/NotesPage';
+import { AuthForm } from './components/AuthForm';
 import toast from 'react-hot-toast';
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
     <Route path = '/' element = {<HomePage />} />
     <Route path = '/create' element = {<CreatePage />} />
     <Route path = '/note/:id' element = {<NotesPage />} />
+    <Route path = '/auth' element = {<AuthForm />} />
 
   </Routes>
   </div>);

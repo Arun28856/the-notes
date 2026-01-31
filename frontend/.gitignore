@@ -39,3 +39,7 @@ pnpm-lock.yaml
 
 #Readme files
 README.md
+
+#firebase config env
+.env.example
+
