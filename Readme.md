@@ -1,41 +1,58 @@
 # 📝 Notes App (MERN Stack)
 
 ## 📌 Overview
-A **Notes Application** built using the **MERN Stack**, focusing on implementing **basic CRUD operations** to create, edit, and delete notes.
+A **Notes Application** built using the **MERN Stack**, implementing **CRUD operations** along with a fully functional **Login and Signup system** using **Firebase Authentication**.
 
-This project is currently in an **early development stage**, with authentication features planned for future implementation.
+The project focuses on combining core full-stack development concepts with modern authentication workflows and a clean, responsive user interface.
 
 ---
 
- 🔗 Project Link: https://the-notes.onrender.com/
 🔗 Project Link: https://the-notes.onrender.com/
 
 ---
-## 🚀 Features
+
+## 🚀 Current Features
 - Create notes  
 - Edit notes  
 - Delete notes  
-- Clean and responsive UI  
+- User authentication using **Firebase Auth**  
+  - Signup  
+  - Login  
+- Secure user session handling  
+- Responsive UI with notifications  
 
 ---
 
 ## 🧱 Tech Stack
+
+### Framework
 - **MERN Stack**
-- **Vite.js** (Frontend)
+
+### Frontend
+- **Vite.js**
+- **React.js**
 - **Tailwind CSS**
 - **DaisyUI**
-- **React Hot Toast** (Notifications)
+- **React Hot Toast**
+
+### Backend
+- **Node.js**
+- **Express.js**
+- **MongoDB**
+
+### Authentication
+- **Firebase Authentication**
 
 ---
 
 ## 🔮 Upcoming Features
-- User authentication using **JWT**  
-- **OAuth**-based login  
-- User-specific notes  
+1. **Email verification** using OTP or verification link  
+2. **Signup/Login with GitHub**  
+3. **Settings module**
+   - Theme change  
+   - Account settings  
 
 ---
 
 ## 🌐 Deployment
-The application is **partially deployed**, so a live preview is not available.  
-Local execution steps are provided below.
-
+The application has been deployed on Render
