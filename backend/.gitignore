@@ -23,3 +23,8 @@ pnpm-lock.yaml
 
 #firebase 
 the-notes-8047e-firebase-adminsdk-8o94c-7008867158.json
+/.env   
+
+
+#next.js build output
+/.next

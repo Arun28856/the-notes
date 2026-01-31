@@ -12,6 +12,21 @@ export const NotesPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
+    const fetchNote = async (e) => {
+      try {
+        const res = await axios.get(`/api/notes/${id}`);
+        setTitle(res.data.title)
+        setContent(res.data.content)
+      } catch (error) {
+        toast.error('Failed to fetch note');
+        navigate('/');
+      } finally {
+        setFetching(false)
+      }
+    }
+    fetchNote()
+  }
+
   useEffect(() => {
     const fetchNote = async () => {
       try {

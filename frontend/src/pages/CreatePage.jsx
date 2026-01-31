@@ -1,4 +1,5 @@
 import api from "../lib/api";
+import api from "../lib/axios";
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -75,4 +76,5 @@ export const CreatePage = () => {
   </div>);
 }
 
+export default CreatePage;
 export default CreatePage;
