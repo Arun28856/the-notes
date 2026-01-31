@@ -7,6 +7,7 @@ This project is currently in an **early development stage**, with authentication
 
 ---
 
+ 🔗 Project Link: https://the-notes.onrender.com/
 🔗 Project Link: https://the-notes.onrender.com/
 
 ---

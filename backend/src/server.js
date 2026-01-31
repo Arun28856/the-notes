@@ -2,17 +2,18 @@ import 'dotenv/config';
 import express from "express";
 import cors from 'cors';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 import request from "./routes/restAPIs.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from './middleware/ratelimiter.js';
+import { validateEmailDomain } from "./Controllers/validateEmailController.js";
+import authRoutes from "./routes/authRoutes.js";
+
+const app = express();
 
 const __dirname = path.resolve();
 
-console.log(process.env.MONGODB_URI);
-
-const app = express();
 const PORT = process.env.PORT || 8080;
 
 if(process.env.NODE_ENV !== "production") {
@@ -31,6 +32,8 @@ app.use(express.json());
 app.use(rateLimiter);
 
 app.use("/api/notes", request);
+app.post("/api/validate-email", validateEmailDomain);
+app.use("/api/auth", authRoutes);
 
 if(process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname,"../frontend/dist")));
@@ -49,7 +52,7 @@ connectDB().then(() => {
 
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received: closing HTTP server');
-  mongoose.connection.close(false, () => {
+  mongoose.connection?.close(false, () => {
     console.log('MongoDB connection closed');
     process.exit(0);
   });

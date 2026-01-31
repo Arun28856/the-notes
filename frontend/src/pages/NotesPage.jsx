@@ -128,5 +128,6 @@ export const NotesPage = () => {
     </div>
 
   </div>);
+};
 
 export default NotesPage;

@@ -1,3 +1,38 @@
+import Navbar from '../components/Navbar.jsx';
+import { useEffect, useState } from 'react';
+import Ratelimited from '../components/RateLimitedUI.jsx';
+import NoteCard from '../components/NoteCard.jsx';
+import api from '../lib/api.js';
+import toast from 'react-hot-toast';
+import { Link } from 'react-router';
+import { useAuth } from '../context/AuthContext';
+
+export const HomePage = () => {
+  const { currentUser, loading: authLoading } = useAuth();
+  const [isRatelimited, setIsRatelimited] = useState(false);
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!currentUser) {
+      setLoading(false);
+      setNotes([]);
+      return;
+    }
+    const fetchNotes = async () => {
+      try {
+        const res = await api.get("/api/notes");
+        const data = res.data;
+        setNotes(Array.isArray(data) ? data : []);
+        setIsRatelimited(false);
+      } catch (error) {
+        if (error.response?.status === 429) {
+          setIsRatelimited(true);
+        } else if (error.response?.status === 401) {
+          setNotes([]);
+        } else {
+          toast.error("Failed to load notes");
+          setNotes([]);
 import Navbar  from '../components/Navbar.jsx';
 import { useEffect, useState } from 'react';
 import Ratelimited from '../components/RateLimitedUI.jsx';
@@ -31,6 +66,12 @@ export const HomePage = () => {
       }
     };
     fetchNotes();
+  }, [currentUser]);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this note?')) return;
+    try {
+      await api.delete(`/api/notes/${id}`);
   }, []);
 
   const handleDelete = async (id) => {
@@ -49,6 +90,18 @@ export const HomePage = () => {
     {isRatelimited && <Ratelimited />}
     
     <div className='max-w-6xl mx-auto px-8 md:px-12 lg:px-16 py-4 mt-8'>
+      {authLoading && <div className='text-center text-secondary py-5'>Loading...</div>}
+      {!authLoading && !currentUser && (
+        <div className='flex flex-col items-center justify-center py-20'>
+          <div className='text-6xl mb-4'>🔐</div>
+          <h2 className='text-2xl font-bold text-base-content mb-2'>Sign in to view your notes</h2>
+          <p className='text-base-content/70 mb-6'>Log in or create an account to get started.</p>
+          <Link to="/auth" className='btn btn-primary'>Login</Link>
+        </div>
+      )}
+      {!authLoading && currentUser && loading && <div className='text-center text-secondary py-5'>Loading notes...</div>}
+
+      {!authLoading && currentUser && notes.length > 0 && !isRatelimited && (
       {loading && <div className='text-center text-secondary py-5'>Loading notes...</div>}
 
       {notes.length > 0 && !isRatelimited && (
@@ -59,6 +112,7 @@ export const HomePage = () => {
         </div>
       )}
 
+      {!authLoading && currentUser && notes.length === 0 && !loading && !isRatelimited && (
       {notes.length === 0 && !loading && !isRatelimited && (
         <div className='flex flex-col items-center justify-center py-20'>
           <div className='text-6xl mb-4'>📝</div>
